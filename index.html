@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+
+<head>
+    <script src="calc.js"></script>
+    <script src="test.js"></script>
+
+    <title>Augmentation Calcualtor</title>
+</head>
+
+<html lang="en">
+<body>
+
+<h1>Augmentation Calculator</h1>
+
+<label for="aug">Augmentation (enter 0, 1, 2 ...)</label>
+<input type="text" id="aug" name="aug" value="0">
+<br/>
+
+<label for="relics">Enter relics</label>
+<input type="text" id="relics" name="relics" value="0">
+<br/>
+
+<label for="prelics">Enter Pristine Relics</label>
+<input type="text" id="prelics" name="prelics" value="0">
+<br/>
+
+<label for="matrices">Enter Matrices</label>
+<input type="text" id="matrices" name="matrices" value="0">
+<br/>
+
+<label for="journals">Enter Journals</label>
+<input type="text" id="journals" name="journals" value="0">
+<br/>
+
+<label for="pages">Enter Pages</label>
+<input type="text" id="pages" name="pages" value="0">
+<br/>
+
+<label for="cm100">Play 100 CM</label>
+<input type="checkbox" id="cm100" name="cm100" checked>
+<br/>
+
+<label for="cm99">Play 99 CM</label>
+<input type="checkbox" id="cm99" name="cm99" checked>
+<br/>
+
+<label for="cm98">Play 98 CM</label>
+<input type="checkbox" id="cm98" name="cm98" checked>
+<br/>
+
+<label for="t4">Play T4</label>
+<input type="checkbox" id="t4" name="t4" checked>
+<br/>
+
+<label for="recs">Play Recs</label>
+<input type="checkbox" id="recs" name="recs" checked>
+<br/>
+
+<label for="weeklyT4">Play weekly T4</label>
+<input type="checkbox" id="weeklyT4" name="weeklyT4" checked>
+<br/>
+
+<label for="conv">Convert Pots</label>
+<input type="checkbox" id="conv" name="conv" checked>
+<br/>
+
+<button type="button" onClick="calc()">Calculate</button>
+<button type="button" id="test" onClick="test()">Test</button>
+
+<div id="result">
+</div>
+
+</body>
+</html>

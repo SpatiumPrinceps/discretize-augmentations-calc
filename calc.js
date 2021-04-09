@@ -3,7 +3,7 @@ function calc() {
 
     const elem = document.getElementById("result");
 
-    elem.innerText = JSON.stringify(result,null,"\t");
+    elem.innerText = JSON.stringify(result, null, "\t");
 }
 
 
@@ -93,6 +93,20 @@ function div(a, b) {
     return Math.floor(a / b);
 }
 
+function m_to_r(t_r, t_m, gain_r, augment, matrix_by_day, r_to_m_t) {
+    let r_time_overload_t = 0;
+    if (div(t_r.v, (gain_r + augment)) < div(t_m.v, matrix_by_day)) {
+        r_time_overload_t = div(t_m.v, matrix_by_day) - div(t_r.v, (gain_r + augment));
+    } else {
+        r_time_overload_t = 0;
+    }
+
+    if (t_m.v !== 0) {
+        r_to_m_t.v += div((t_m.v * r_time_overload_t), div(t_m.v, matrix_by_day));
+        t_r.v += div((t_m.v * r_time_overload_t), div(t_m.v, matrix_by_day) * 15);
+        t_m.v -= r_to_m_t.v;
+    }
+}
 
 function resteAppreAchat(
     norm_dura_t,
@@ -258,13 +272,13 @@ const calculate = ({
 
     // ideal conversions
     let p_to_r_t1 = 0;
-    let r_to_m_t1 = 0;
+    let r_to_m_t1 = {v: 0};
     let p_to_r_t2 = 0;
-    let r_to_m_t2 = 0;
+    let r_to_m_t2 = {v: 0};
     let p_to_r_t3 = 0;
-    let r_to_m_t3 = 0;
+    let r_to_m_t3 = {v: 0};
     let p_to_r_t4 = 0;
-    let r_to_m_t4 = 0;
+    let r_to_m_t4 = {v: 0};
 
     // ideal duration
     let t1_time = 0;
@@ -289,22 +303,22 @@ const calculate = ({
     let gain_r = relics_by_day - augment_by_day;
 
     // coup des tier (les journal sont en pages)
-    let t1_r = MIST_ATTUNEMENTS[0].relics;
-    let t2_r = MIST_ATTUNEMENTS[1].relics;
-    let t3_r = MIST_ATTUNEMENTS[2].relics;
-    let t4_r = MIST_ATTUNEMENTS[3].relics;
-    let t1_p = MIST_ATTUNEMENTS[0].pristines;
-    let t2_p = MIST_ATTUNEMENTS[1].pristines;
-    let t3_p = MIST_ATTUNEMENTS[2].pristines;
-    let t4_p = MIST_ATTUNEMENTS[3].pristines;
-    let t1_m = MIST_ATTUNEMENTS[0].matrices;
-    let t2_m = MIST_ATTUNEMENTS[1].matrices;
-    let t3_m = MIST_ATTUNEMENTS[2].matrices;
-    let t4_m = MIST_ATTUNEMENTS[3].matrices;
-    let t1_j = MIST_ATTUNEMENTS[0].journals * 28;
-    let t2_j = MIST_ATTUNEMENTS[1].journals * 28;
-    let t3_j = MIST_ATTUNEMENTS[2].journals * 28;
-    let t4_j = MIST_ATTUNEMENTS[3].journals * 28;
+    let t1_r = {v: MIST_ATTUNEMENTS[0].relics};
+    let t2_r = {v: MIST_ATTUNEMENTS[1].relics};
+    let t3_r = {v: MIST_ATTUNEMENTS[2].relics};
+    let t4_r = {v: MIST_ATTUNEMENTS[3].relics};
+    let t1_p = {v: MIST_ATTUNEMENTS[0].pristines};
+    let t2_p = {v: MIST_ATTUNEMENTS[1].pristines};
+    let t3_p = {v: MIST_ATTUNEMENTS[2].pristines};
+    let t4_p = {v: MIST_ATTUNEMENTS[3].pristines};
+    let t1_m = {v: MIST_ATTUNEMENTS[0].matrices};
+    let t2_m = {v: MIST_ATTUNEMENTS[1].matrices};
+    let t3_m = {v: MIST_ATTUNEMENTS[2].matrices};
+    let t4_m = {v: MIST_ATTUNEMENTS[3].matrices};
+    let t1_j = {v: MIST_ATTUNEMENTS[0].journals * 28};
+    let t2_j = {v: MIST_ATTUNEMENTS[1].journals * 28};
+    let t3_j = {v: MIST_ATTUNEMENTS[2].journals * 28};
+    let t4_j = {v: MIST_ATTUNEMENTS[3].journals * 28};
 
     // relics que l'on a déjà et les reste a l'achat
     // pack into an object so we can keep those values accross different functions since js doesnt know "references"
@@ -332,45 +346,44 @@ const calculate = ({
     norm_dura_t4_j = div(MIST_ATTUNEMENTS[3].journals, pages_by_day);
 
 
-
     // augmentation déjà acheter
 
     //augmentation déjà acheter
     if (augment >= 1) {
-        t1_r = 0;
-        t1_p = 0;
-        t1_m = 0;
-        t1_j = 0;
+        t1_r.v = 0;
+        t1_p.v = 0;
+        t1_m.v = 0;
+        t1_j.v = 0;
         norm_dura_t1_r = 0;
         norm_dura_t1_p = 0;
         norm_dura_t1_m = 0;
         norm_dura_t1_j = 0;
     }
     if (augment >= 2) {
-        t2_r = 0;
-        t2_p = 0;
-        t2_m = 0;
-        t2_j = 0;
+        t2_r.v = 0;
+        t2_p.v = 0;
+        t2_m.v = 0;
+        t2_j.v = 0;
         norm_dura_t2_r = 0;
         norm_dura_t2_p = 0;
         norm_dura_t2_m = 0;
         norm_dura_t2_j = 0;
     }
     if (augment >= 3) {
-        t3_r = 0;
-        t3_p = 0;
-        t3_m = 0;
-        t3_j = 0;
+        t3_r.v = 0;
+        t3_p.v = 0;
+        t3_m.v = 0;
+        t3_j.v = 0;
         norm_dura_t3_r = 0;
         norm_dura_t3_p = 0;
         norm_dura_t3_m = 0;
         norm_dura_t3_j = 0;
     }
     if (augment >= 4) {
-        t4_r = 0;
-        t4_p = 0;
-        t4_m = 0;
-        t4_j = 0;
+        t4_r.v = 0;
+        t4_p.v = 0;
+        t4_m.v = 0;
+        t4_j.v = 0;
         norm_dura_t4_r = 0;
         norm_dura_t4_p = 0;
         norm_dura_t4_m = 0;
@@ -378,40 +391,33 @@ const calculate = ({
     }
 
     // décremente les resource que l'on posséde
-    t1_r = coutMoinReste(t1_r, reste_r);
-    t1_p = coutMoinReste(t1_p, reste_p);
-    t1_m = coutMoinReste(t1_m, reste_m);
-    t1_j = coutMoinReste(t1_j, reste_j);
+    t1_r.v = coutMoinReste(t1_r.v, reste_r);
+    t1_p.v = coutMoinReste(t1_p.v, reste_p);
+    t1_m.v = coutMoinReste(t1_m.v, reste_m);
+    t1_j.v = coutMoinReste(t1_j.v, reste_j);
 
-    t2_r = coutMoinReste(t2_r, reste_r);
-    t2_p = coutMoinReste(t2_p, reste_p);
-    t2_m = coutMoinReste(t2_m, reste_m);
-    t2_j = coutMoinReste(t2_j, reste_j);
+    t2_r.v = coutMoinReste(t2_r.v, reste_r);
+    t2_p.v = coutMoinReste(t2_p.v, reste_p);
+    t2_m.v = coutMoinReste(t2_m.v, reste_m);
+    t2_j.v = coutMoinReste(t2_j.v, reste_j);
 
-    t3_r = coutMoinReste(t3_r, reste_r);
-    t3_p = coutMoinReste(t3_p, reste_p);
-    t3_m = coutMoinReste(t3_m, reste_m);
-    t3_j = coutMoinReste(t3_j, reste_j);
+    t3_r.v = coutMoinReste(t3_r.v, reste_r);
+    t3_p.v = coutMoinReste(t3_p.v, reste_p);
+    t3_m.v = coutMoinReste(t3_m.v, reste_m);
+    t3_j.v = coutMoinReste(t3_j.v, reste_j);
+    /gg
 
-    t4_r = coutMoinReste(t4_r, reste_r);
-    t4_p = coutMoinReste(t4_p, reste_p);
-    t4_m = coutMoinReste(t4_m, reste_m);
-    t4_j = coutMoinReste(t4_j, reste_j);
+
+    t4_r.v = coutMoinReste(t4_r.v, reste_r);
+    t4_p.v = coutMoinReste(t4_p.v, reste_p);
+    t4_m.v = coutMoinReste(t4_m.v, reste_m);
+    t4_j.v = coutMoinReste(t4_j.v, reste_j);
 
     /* Calcul */
-    reste_r.v = 0;
-    reste_p.v = 0;
-    reste_m.v = 0;
-    reste_j.v = 0;
-
     let p_to_r_time_overload_t4 = 0;
     let p_to_r_time_overload_t3 = 0;
     let p_to_r_time_overload_t2 = 0;
     let p_to_r_time_overload_t1 = 0;
-    let r_time_overload_t4 = 0;
-    let r_time_overload_t3 = 0;
-    let r_time_overload_t2 = 0;
-    let r_time_overload_t1 = 0;
     let p_time_overload_t4 = 0;
     let p_time_overload_t3 = 0;
     let p_time_overload_t2 = 0;
@@ -419,13 +425,6 @@ const calculate = ({
     /* --------------------------------------------------------------------Si m > r--------------------------------------------------------------------------*/
 
     // Si time m > time r ## si oui m time - r time = r time overload ## si non r time overload = 0
-
-    if (div(t4_r, gain_r + augment_by_day_t3) < div(t4_m, matrix_by_day)) {
-        r_time_overload_t4 =
-            div(t4_m, matrix_by_day) - div(t4_r, gain_r + augment_by_day_t3);
-    } else {
-        r_time_overload_t4 = 0;
-    }
 
     // réajuste les coup des tier pour que ça prenne en compte les m time overload des tier
     /*
@@ -435,54 +434,17 @@ const calculate = ({
 
     180 - x = reste * 15
     */
-    if (t4_m !== 0) {
-        r_to_m_t4 = div(t4_m * r_time_overload_t4, div(t4_m, matrix_by_day));
-        t4_r += div(t4_m * r_time_overload_t4, div(t4_m, matrix_by_day)) * 15;
-        t4_m -= r_to_m_t4;
-    }
 
-    // #
-    if (div(t3_r, gain_r + augment_by_day_t2) < div(t3_m, matrix_by_day)) {
-        r_time_overload_t3 =
-            div(t3_m, matrix_by_day) - div(t3_r, gain_r + augment_by_day_t2);
-    } else {
-        r_time_overload_t3 = 0;
-    }
-
-    if (t3_m !== 0) {
-        r_to_m_t3 = div(t3_m * r_time_overload_t3, div(t3_m, matrix_by_day));
-        t3_r += div(t3_m * r_time_overload_t3, div(t3_m, matrix_by_day)) * 15;
-        t3_m -= r_to_m_t3;
-    }
-    // ##
-
-    // #
-    if (div(t2_r, gain_r + augment_by_day_t1) < div(t2_m, matrix_by_day)) {
-        r_time_overload_t2 =
-            div(t2_m, matrix_by_day) - div(t2_r, gain_r + augment_by_day_t1);
-    } else {
-        r_time_overload_t2 = 0;
-    }
+    m_to_r(t4_r, t4_m, gain_r, augment_by_day_t3, matrix_by_day, r_to_m_t4);
+    m_to_r(t3_r, t3_m, gain_r, augment_by_day_t2, matrix_by_day, r_to_m_t3);
+    m_to_r(t2_r, t2_m, gain_r, augment_by_day_t1, matrix_by_day, r_to_m_t2);
+    m_to_r(t1_r, t1_m, gain_r, 0, matrix_by_day, r_to_m_t1);
 
     // ##
-    if (t2_m !== 0) {
-        r_to_m_t2 = div(t2_m * r_time_overload_t2, div(t2_m, matrix_by_day));
-        t2_r += div(t2_m * r_time_overload_t2, div(t2_m, matrix_by_day)) * 15;
-        t2_m -= r_to_m_t2;
-    }
-
-    // #
-    if (div(t1_r, gain_r) < div(t1_m, matrix_by_day)) {
-        r_time_overload_t1 = div(t1_m, matrix_by_day) - div(t1_r, gain_r);
-    } else {
-        r_time_overload_t1 = 0;
-    }
-
-    // ##
-    if (t2_m !== 0) {
-        r_to_m_t1 = div(t1_m * r_time_overload_t1, div(t1_m, matrix_by_day));
-        t1_r += div(t1_m * r_time_overload_t1, div(t1_m, matrix_by_day)) * 15;
-        t1_m -= r_to_m_t1;
+    if (t2_m.v !== 0) {
+        r_to_m_t1.v = div(t1_m.v * r_time_overload_t1, div(t1_m.v, matrix_by_day));
+        t1_r.v += div(t1_m.v * r_time_overload_t1, div(t1_m.v, matrix_by_day)) * 15;
+        t1_m.v -= r_to_m_t1.v;
     }
 
     /* --------------------------------------------------------------------Si p > r--------------------------------------------------------------------------*/
@@ -490,50 +452,50 @@ const calculate = ({
     if (augment !== 3 && augment !== 4) {
         // regarde si r time < p time ## si oui r time - p time = p time overload ## si non p time overload = 0
         if (
-            div(t4_r, gain_r + augment_by_day_t3) < div(t4_p, pristines_by_day) &&
+            div(t4_r.v, gain_r + augment_by_day_t3) < div(t4_p.v, pristines_by_day) &&
             augment < 3
         ) {
             p_time_overload_t4 =
-                div(t4_p, pristines_by_day) - div(t4_r, gain_r + augment_by_day_t3);
+                div(t4_p.v, pristines_by_day) - div(t4_r.v, gain_r + augment_by_day_t3);
         } else {
             p_time_overload_t4 = 0;
         }
 
         // réajuste les coup des tier pour que ça prenne en compte les p time overload des tier
-        t4_p -= p_time_overload_t4 * pristines_by_day;
-        t3_p += p_time_overload_t4 * pristines_by_day;
+        t4_p.v -= p_time_overload_t4 * pristines_by_day;
+        t3_p.v += p_time_overload_t4 * pristines_by_day;
 
         if (augment !== 2) {
             // #
             if (
-                div(t3_r, gain_r + augment_by_day_t2) < div(t3_p, pristines_by_day) &&
+                div(t3_r.v, gain_r + augment_by_day_t2) < div(t3_p.v, pristines_by_day) &&
                 augment < 2
             ) {
                 p_time_overload_t3 =
-                    div(t3_p, pristines_by_day) - div(t3_r, gain_r + augment_by_day_t2);
+                    div(t3_p.v, pristines_by_day) - div(t3_r.v, gain_r + augment_by_day_t2);
             } else {
                 p_time_overload_t3 = 0;
             }
 
             // ##
-            t3_p -= p_time_overload_t3 * pristines_by_day;
-            t2_p += p_time_overload_t3 * pristines_by_day;
+            t3_p.v -= p_time_overload_t3 * pristines_by_day;
+            t2_p.v += p_time_overload_t3 * pristines_by_day;
 
             if (augment !== 1) {
                 // #
                 if (
-                    div(t2_r, gain_r + augment_by_day_t1) < div(t2_p, pristines_by_day) &&
+                    div(t2_r.v, gain_r + augment_by_day_t1) < div(t2_p.v, pristines_by_day) &&
                     augment < 1
                 ) {
                     p_time_overload_t2 =
-                        div(t2_p, pristines_by_day) - div(t2_r, gain_r + augment_by_day_t1);
+                        div(t2_p.v, pristines_by_day) - div(t2_r.v, gain_r + augment_by_day_t1);
                 } else {
                     p_time_overload_t4 = 0;
                 }
 
                 // ##
-                t2_p -= p_time_overload_t2 * pristines_by_day;
-                t1_p += p_time_overload_t2 * pristines_by_day;
+                t2_p.v -= p_time_overload_t2 * pristines_by_day;
+                t1_p.v += p_time_overload_t2 * pristines_by_day;
             }
         }
     }
@@ -544,8 +506,8 @@ const calculate = ({
     // gain de r pend le gain des p = t1_r - (gain_r * t1_p,pristines_by_day)   #####
     // p_to_r_time_overload = (gain de r pend le gain des p),(gain_r + pristines_by_day * 15)
     // faut trouvé le temps q'il reste avec le gain des relic est de pristine
-    if (div(t1_p, pristines_by_day) < div(t1_r, gain_r) && t1_p !== 0) {
-        p_to_r_time_overload_t1 = t1_r - div(gain_r * t1_p, pristines_by_day);
+    if (div(t1_p.v, pristines_by_day) < div(t1_r.v, gain_r)) {
+        p_to_r_time_overload_t1 = t1_r.v - div(gain_r * t1_p.v, pristines_by_day);
         p_to_r_time_overload_t1 = div(
             p_to_r_time_overload_t1,
             gain_r + pristines_by_day * 15,
@@ -556,12 +518,12 @@ const calculate = ({
 
     reste_r.v += p_to_r_time_overload_t1 * pristines_by_day * 15;
     p_to_r_t1 = p_to_r_time_overload_t1 * pristines_by_day;
-    t1_r = coutMoinReste(t1_r, reste_r);
-    t1_p += p_to_r_t1;
+    t1_r.v = coutMoinReste(t1_r.v, reste_r);
+    t1_p.v += p_to_r_t1;
 
     // #
-    if (div(t2_p, pristines_by_day) < div(t2_r, gain_r) && t2_p !== 0) {
-        p_to_r_time_overload_t2 = t2_r - div(gain_r * t2_p, pristines_by_day);
+    if (div(t2_p.v, pristines_by_day) < div(t2_r.v, gain_r) ) {
+        p_to_r_time_overload_t2 = t2_r.v - div(gain_r * t2_p.v, pristines_by_day);
         p_to_r_time_overload_t2 = div(
             p_to_r_time_overload_t2,
             gain_r + pristines_by_day * 15 + augment_by_day_t1,
@@ -573,12 +535,12 @@ const calculate = ({
     // ##
     reste_r.v += p_to_r_time_overload_t2 * pristines_by_day * 15;
     p_to_r_t2 = p_to_r_time_overload_t2 * pristines_by_day;
-    t2_r = coutMoinReste(t2_r, reste_r);
-    t2_p += p_to_r_t2;
+    t2_r.v = coutMoinReste(t2_r.v, reste_r);
+    t2_p.v += p_to_r_t2;
 
     // #
-    if (div(t3_p, pristines_by_day) < div(t3_r, gain_r) && t3_p !== 0) {
-        p_to_r_time_overload_t3 = t3_r - div(gain_r * t3_p, pristines_by_day);
+    if (div(t3_p.v, pristines_by_day) < div(t3_r.v, gain_r)) {
+        p_to_r_time_overload_t3 = t3_r.v - div(gain_r * t3_p.v, pristines_by_day);
         p_to_r_time_overload_t3 = div(
             p_to_r_time_overload_t3,
             gain_r + pristines_by_day * 15 + augment_by_day_t2,
@@ -590,12 +552,12 @@ const calculate = ({
     // ##
     reste_r.v += p_to_r_time_overload_t3 * pristines_by_day * 15;
     p_to_r_t3 = p_to_r_time_overload_t3 * pristines_by_day;
-    t3_r = coutMoinReste(t3_r, reste_r);
-    t3_p += p_to_r_t3;
+    t3_r.v = coutMoinReste(t3_r.v, reste_r);
+    t3_p.v += p_to_r_t3;
 
     // #
-    if (div(t4_p, pristines_by_day) < div(t4_r, gain_r) && t4_p !== 0) {
-        p_to_r_time_overload_t4 = t4_r - div(gain_r * t4_p, pristines_by_day);
+    if (div(t4_p.v, pristines_by_day) < div(t4_r.v, gain_r)) {
+        p_to_r_time_overload_t4 = t4_r - div(gain_r * t4_p.v, pristines_by_day);
         p_to_r_time_overload_t4 = div(
             p_to_r_time_overload_t4,
             gain_r + pristines_by_day * 15 + augment_by_day_t3,
@@ -607,8 +569,30 @@ const calculate = ({
     // ##
     reste_r.v += p_to_r_time_overload_t4 * pristines_by_day * 15;
     p_to_r_t4 = p_to_r_time_overload_t4 * pristines_by_day;
-    t4_r = coutMoinReste(t4_r, reste_r);
-    t4_p += p_to_r_t4;
+    t4_r.v = coutMoinReste(t4_r.v, reste_r);
+    t4_p.v += p_to_r_t4;
+
+
+
+    /*--------------------------------------------------------------------Si m > r--------------------------------------------------------------------------*/
+
+
+    // Si time m > time r ## si oui m time - r time = r time overload ## si non r time overload = 0
+
+    //réajuste les coup des tier pour que ça prenne en compte les m time overload des tier
+    /*
+        cout | time
+    180  | 60
+         | 50
+    180 - x = reste * 15
+    */
+
+    m_to_r(t4_r, t4_m, gain_r, augment_by_day_t3, matrix_by_day, r_to_m_t4);
+    m_to_r(t3_r, t3_m, gain_r, augment_by_day_t2, matrix_by_day, r_to_m_t3);
+    m_to_r(t2_r, t2_m, gain_r, augment_by_day_t1, matrix_by_day, r_to_m_t2);
+    m_to_r(t1_r, t1_m, gain_r, 0, matrix_by_day, r_to_m_t1);
+
+
 
     /* -----------------------------------------------------------------calcul des reste---------------------------------------------------------------------*/
 
@@ -616,10 +600,10 @@ const calculate = ({
 
     // sort le time du tier ## atualise les reste avec les reste d'achat du tier
     let norm_dura_t1 = timeMiniTier(
-        t1_r,
-        t1_p,
-        t1_m,
-        t1_j,
+        t1_r.v,
+        t1_p.v,
+        t1_m.v,
+        t1_j.v,
         gain_r,
         pristines_by_day,
         matrix_by_day,
@@ -629,10 +613,10 @@ const calculate = ({
     );
     resteAppreAchat(
         norm_dura_t1,
-        t1_r,
-        t1_p,
-        t1_m,
-        t1_j,
+        t1_r.v,
+        t1_p.v,
+        t1_m.v,
+        t1_j.v,
         gain_r,
         pristines_by_day,
         matrix_by_day,
@@ -646,17 +630,17 @@ const calculate = ({
     );
     // décremente les resource que l'on a en trop
 
-    t2_r = coutMoinReste(t2_r, reste_r);
-    t2_p = coutMoinReste(t2_p, reste_p);
-    t2_m = coutMoinReste(t2_m, reste_m);
-    t2_j = coutMoinReste(t2_j, reste_j);
+    t2_r.v = coutMoinReste(t2_r.v, reste_r);
+    t2_p.v = coutMoinReste(t2_p.v, reste_p);
+    t2_m.v = coutMoinReste(t2_m.v, reste_m);
+    t2_j.v = coutMoinReste(t2_j.v, reste_j);
 
     // #
     let norm_dura_t2 = timeMiniTier(
-        t2_r,
-        t2_p,
-        t2_m,
-        t2_j,
+        t2_r.v,
+        t2_p.v,
+        t2_m.v,
+        t2_j.v,
         gain_r,
         pristines_by_day,
         matrix_by_day,
@@ -666,10 +650,10 @@ const calculate = ({
     );
     resteAppreAchat(
         norm_dura_t2,
-        t2_r,
-        t2_p,
-        t2_m,
-        t2_j,
+        t2_r.v,
+        t2_p.v,
+        t2_m.v,
+        t2_j.v,
         gain_r,
         pristines_by_day,
         matrix_by_day,
@@ -683,17 +667,17 @@ const calculate = ({
     );
 
     // ##
-    t3_r = coutMoinReste(t3_r, reste_r);
-    t3_p = coutMoinReste(t3_p, reste_p);
-    t3_m = coutMoinReste(t3_m, reste_m);
-    t3_j = coutMoinReste(t3_j, reste_j);
+    t3_r.v = coutMoinReste(t3_r.v, reste_r);
+    t3_p.v = coutMoinReste(t3_p.v, reste_p);
+    t3_m.v = coutMoinReste(t3_m.v, reste_m);
+    t3_j.v = coutMoinReste(t3_j.v, reste_j);
 
     // #
     let norm_dura_t3 = timeMiniTier(
-        t3_r,
-        t3_p,
-        t3_m,
-        t3_j,
+        t3_r.v,
+        t3_p.v,
+        t3_m.v,
+        t3_j.v,
         gain_r,
         pristines_by_day,
         matrix_by_day,
@@ -703,10 +687,10 @@ const calculate = ({
     );
     resteAppreAchat(
         norm_dura_t3,
-        t3_r,
-        t3_p,
-        t3_m,
-        t3_j,
+        t3_r.v,
+        t3_p.v,
+        t3_m.v,
+        t3_j.v,
         gain_r,
         pristines_by_day,
         matrix_by_day,
@@ -720,16 +704,16 @@ const calculate = ({
     );
 
     // ##
-    t4_r = coutMoinReste(t4_r, reste_r);
-    t4_p = coutMoinReste(t4_p, reste_p);
-    t4_m = coutMoinReste(t4_m, reste_m);
-    t4_j = coutMoinReste(t4_j, reste_j);
+    t4_r.v = coutMoinReste(t4_r.v, reste_r);
+    t4_p.v = coutMoinReste(t4_p.v, reste_p);
+    t4_m.v = coutMoinReste(t4_m.v, reste_m);
+    t4_j.v = coutMoinReste(t4_j.v, reste_j);
 
     let norm_dura_t4 = timeMiniTier(
-        t4_r,
-        t4_p,
-        t4_m,
-        t4_j,
+        t4_r.v,
+        t4_p.v,
+        t4_m.v,
+        t4_j.v,
         gain_r,
         pristines_by_day,
         matrix_by_day,
@@ -741,10 +725,10 @@ const calculate = ({
     /* -------------------------------------------------------------------final time-------------------------------------------------------------------------*/
 
     t1_time = timeMiniTier(
-        t1_r,
-        t1_p,
-        t1_m,
-        t1_j,
+        t1_r.v,
+        t1_p.v,
+        t1_m.v,
+        t1_j.v,
         gain_r,
         pristines_by_day,
         matrix_by_day,
@@ -754,10 +738,10 @@ const calculate = ({
     );
     t2_time =
         timeMiniTier(
-            t2_r,
-            t2_p,
-            t2_m,
-            t2_j,
+            t2_r.v,
+            t2_p.v,
+            t2_m.v,
+            t2_j.v,
             gain_r,
             pristines_by_day,
             matrix_by_day,
@@ -767,10 +751,10 @@ const calculate = ({
         ) + t1_time;
     t3_time =
         timeMiniTier(
-            t3_r,
-            t3_p,
-            t3_m,
-            t3_j,
+            t3_r.v,
+            t3_p.v,
+            t3_m.v,
+            t3_j.v,
             gain_r,
             pristines_by_day,
             matrix_by_day,
@@ -780,10 +764,10 @@ const calculate = ({
         ) + t2_time;
     t4_time =
         timeMiniTier(
-            t4_r,
-            t4_p,
-            t4_m,
-            t4_j,
+            t4_r.v,
+            t4_p.v,
+            t4_m.v,
+            t4_j.v,
             gain_r,
             pristines_by_day,
             matrix_by_day,
@@ -806,7 +790,7 @@ const calculate = ({
             },
             convert: {
                 pristinesToRelics: p_to_r_t1,
-                relicsToMatrices: r_to_m_t1,
+                relicsToMatrices: r_to_m_t1.v,
                 pagesToJournals: 0,
             },
             total: {
@@ -829,7 +813,7 @@ const calculate = ({
             },
             convert: {
                 pristinesToRelics: p_to_r_t2,
-                relicsToMatrices: r_to_m_t2,
+                relicsToMatrices: r_to_m_t2.v,
                 pagesToJournals: 0,
             },
             total: {
@@ -852,7 +836,7 @@ const calculate = ({
             },
             convert: {
                 pristinesToRelics: p_to_r_t3,
-                relicsToMatrices: r_to_m_t3,
+                relicsToMatrices: r_to_m_t3.v,
                 pagesToJournals: 0,
             },
             total: {
@@ -875,7 +859,7 @@ const calculate = ({
             },
             convert: {
                 pristinesToRelics: p_to_r_t4,
-                relicsToMatrices: r_to_m_t4,
+                relicsToMatrices: r_to_m_t4.v,
                 pagesToJournals: 0,
             },
             total: {

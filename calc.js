@@ -557,7 +557,7 @@ const calculate = ({
 
     // #
     if (div(t4_p.v, pristines_by_day) < div(t4_r.v, gain_r)) {
-        p_to_r_time_overload_t4 = t4_r - div(gain_r * t4_p.v, pristines_by_day);
+        p_to_r_time_overload_t4 = t4_r.v - div(gain_r * t4_p.v, pristines_by_day);
         p_to_r_time_overload_t4 = div(
             p_to_r_time_overload_t4,
             gain_r + pristines_by_day * 15 + augment_by_day_t3,

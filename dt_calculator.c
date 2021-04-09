@@ -5,8 +5,7 @@
 void resteAppreAchat(int norm_dura_t, int t_r, int t_p, int t_m, int t_j, int gain_r, int pristines_by_day, int matrix_by_day, int pages_by_day, int augment_base_gain, int tier, int *reste_r, int *reste_p, int *reste_m, int *reste_j);
 int timeMiniTier(int t_r, int t_p, int t_m, int t_j, int gain_r, int pristines_by_day, int matrix_by_day, float pages_by_day, int augment_base_gain, int tier);
 int coutMoinReste(int t_r, int *reste);
-
-
+void m_to_r(int *t_r, int *t_m, int gain_r, int augment, int matrix_by_day, int *r_to_m_t);
 
 
 
@@ -57,7 +56,7 @@ int main(void) {
 	int relics_by_day = (cm100 * (139+ augment * 5)) + (cm99 * (159 + augment * 5)) + (cm98 * (159 + augment * 5)) + (t4 * (54 + augment * 15)) + (recs * (34 + augment * 11)) + (weekly * 7) + convert_pots * 48;
 	int pristines_by_day = cm100 * 2 + cm99 * 2 + cm98 * 2 + t4 * 12 + recs * 3;
 	int matrix_by_day = cm100 * 1 + cm99 * 1 + cm98 * 1;
-	int pages_by_day = cm100 * 1 + cm99 * 1 + cm98 * 1 + recs * 3 + weekly * 0.285714285714285;
+	float pages_by_day = cm100 * 1 + cm99 * 1 + cm98 * 1 + recs * 3 + weekly * 0.285714285714285;
 
 
 	//normal duration
@@ -150,7 +149,6 @@ int main(void) {
 		norm_dura_t4_r = 0, norm_dura_t4_p = 0, norm_dura_t4_m = 0, norm_dura_t4_j = 0;
 	}
 
-
 	
 	//décremente les resource que l'on posséde
 	t1_r = coutMoinReste(t1_r, &reste_r);
@@ -174,44 +172,22 @@ int main(void) {
 	t4_j = coutMoinReste(t4_j, &reste_j);
 
 
-	
 
 
 
 	/* Calcul */
-
-	reste_r = 0;
-	reste_p = 0;
-	reste_m = 0;
-	reste_j = 0;
-
-
-	
+		
 
 	
 	
-
-	
-	
-	
-	int p_to_r_time_overload_t4, p_to_r_time_overload_t3, p_to_r_time_overload_t2, p_to_r_time_overload_t1 = 0;
-	int r_time_overload_t4, r_time_overload_t3, r_time_overload_t2, r_time_overload_t1 = 0;
-	int p_time_overload_t4, p_time_overload_t3, p_time_overload_t2;
+	int p_to_r_time_overload_t4 = 0, p_to_r_time_overload_t3 = 0, p_to_r_time_overload_t2 = 0, p_to_r_time_overload_t1 = 0;
+	int p_time_overload_t4 = 0, p_time_overload_t3 = 0, p_time_overload_t2 = 0;
 	
 
 /*--------------------------------------------------------------------Si m > r--------------------------------------------------------------------------*/
 
 
 	// Si time m > time r ## si oui m time - r time = r time overload ## si non r time overload = 0
-	
-
-	if(t4_r / (gain_r + augment_by_day_t3) < t4_m / matrix_by_day) {
-		r_time_overload_t4 = t4_m / matrix_by_day - t4_r / (gain_r + augment_by_day_t3);
-	}
-	else {
-		r_time_overload_t4 = 0;
-	}
-
 
 	//réajuste les coup des tier pour que ça prenne en compte les m time overload des tier
 	/*
@@ -221,59 +197,11 @@ int main(void) {
 
 	180 - x = reste * 15
 	*/
-	if(t4_m != 0) {
-		r_to_m_t4 = (t4_m * r_time_overload_t4) / (t4_m / matrix_by_day);
-		t4_r +=  (t4_m * r_time_overload_t4) / (t4_m / matrix_by_day) * 15;
-		t4_m -= r_to_m_t4;
-	}
 	
-
-	//#
-	if(t3_r / (gain_r + augment_by_day_t2) < t3_m / matrix_by_day) {
-		r_time_overload_t3 = t3_m / matrix_by_day - t3_r / (gain_r + augment_by_day_t2);
-	}
-	else {
-		r_time_overload_t3 = 0;
-	}
-
-	if(t3_m != 0) {
-		r_to_m_t3 = (t3_m * r_time_overload_t3) / (t3_m / matrix_by_day);
-		t3_r +=  (t3_m * r_time_overload_t3) / (t3_m / matrix_by_day) * 15;
-		t3_m -= r_to_m_t3;
-	}
-	//##
-	
-
-	//#
-	if(t2_r / (gain_r + augment_by_day_t1) < t2_m / matrix_by_day) {
-		r_time_overload_t2 = t2_m / matrix_by_day - t2_r / (gain_r + augment_by_day_t1);
-	}
-	else {
-		r_time_overload_t2 = 0;
-	}
-
-	//##
-	if(t2_m != 0) {
-		r_to_m_t2 = (t2_m * r_time_overload_t2) / (t2_m / matrix_by_day);
-		t2_r +=  (t2_m * r_time_overload_t2) / (t2_m / matrix_by_day) * 15;
-		t2_m -= r_to_m_t2;
-	}
-	
-	
-	//#
-	if(t1_r / gain_r < t1_m / matrix_by_day) {
-		r_time_overload_t1 = t1_m / matrix_by_day - t1_r / gain_r;
-	}
-	else {
-		r_time_overload_t1 = 0;
-	}
-
-	//##
-	if(t2_m != 0) {
-		r_to_m_t1 = (t1_m * r_time_overload_t1) / (t1_m / matrix_by_day);
-		t1_r +=  (t1_m * r_time_overload_t1) / (t1_m / matrix_by_day) * 15;
-		t1_m -= r_to_m_t1;
-	}
+	m_to_r(&t4_r, &t4_m, gain_r, augment_by_day_t3, matrix_by_day, &r_to_m_t4);
+	m_to_r(&t3_r, &t3_m, gain_r, augment_by_day_t2, matrix_by_day, &r_to_m_t3);
+	m_to_r(&t2_r, &t2_m, gain_r, augment_by_day_t1, matrix_by_day, &r_to_m_t2);
+	m_to_r(&t1_r, &t1_m, gain_r, 0, matrix_by_day, &r_to_m_t1);
 	
 
 /*--------------------------------------------------------------------Si p > r--------------------------------------------------------------------------*/
@@ -320,7 +248,6 @@ int main(void) {
 				//##
 				t2_p -= p_time_overload_t2 * pristines_by_day;
 				t1_p += p_time_overload_t2 * pristines_by_day;
-
 			}
 		}
 	}
@@ -336,8 +263,7 @@ int main(void) {
 	//p_to_r_time_overload = (gain de r pend le gain des p) / (gain_r + pristines_by_day * 15)
 	//faut trouvé le temps q'il reste avec le gain des relic est de pristine
 
-
-	if(t1_p / pristines_by_day < t1_r / gain_r && t1_p != 0) {
+	if(t1_p / pristines_by_day < t1_r / gain_r) { //&& t1_p != 0
 		p_to_r_time_overload_t1 = t1_r - (gain_r * t1_p / pristines_by_day);
 		p_to_r_time_overload_t1 = p_to_r_time_overload_t1 / (gain_r + pristines_by_day * 15);
 	}
@@ -352,8 +278,10 @@ int main(void) {
 	t1_p += p_to_r_t1;
 
 
+
+
 	//#
-	if(t2_p / pristines_by_day < t2_r / gain_r && t2_p != 0) {
+	if(t2_p / pristines_by_day < t2_r / gain_r) { //&& t2_p != 0
 		p_to_r_time_overload_t2 = t2_r - (gain_r * t2_p / pristines_by_day);
 		p_to_r_time_overload_t2 = p_to_r_time_overload_t2 / (gain_r + pristines_by_day * 15 + augment_by_day_t1);
 	}
@@ -369,7 +297,7 @@ int main(void) {
 
 
 	//#
-	if(t3_p / pristines_by_day < t3_r / gain_r && t3_p != 0) {
+	if(t3_p / pristines_by_day < t3_r / gain_r) { //&& t3_p != 0
 		p_to_r_time_overload_t3 = t3_r - (gain_r * t3_p / pristines_by_day);
 		p_to_r_time_overload_t3 = p_to_r_time_overload_t3 / (gain_r + pristines_by_day * 15 + augment_by_day_t2);
 	}
@@ -383,9 +311,8 @@ int main(void) {
 	t3_r = coutMoinReste(t3_r, &reste_r);
 	t3_p += p_to_r_t3;
 
-
 	//#
-	if(t4_p / pristines_by_day < t4_r / gain_r && t4_p != 0) {
+	if(t4_p / pristines_by_day < t4_r / gain_r) { //&& t4_p != 0
 		p_to_r_time_overload_t4 = t4_r - (gain_r * t4_p / pristines_by_day);
 		p_to_r_time_overload_t4 = p_to_r_time_overload_t4 / (gain_r + pristines_by_day * 15 + augment_by_day_t3);
 	}
@@ -398,6 +325,26 @@ int main(void) {
 	p_to_r_t4 = p_to_r_time_overload_t4 * pristines_by_day;
 	t4_r = coutMoinReste(t4_r, &reste_r);
 	t4_p += p_to_r_t4;
+
+
+/*--------------------------------------------------------------------Si m > r--------------------------------------------------------------------------*/
+
+
+	// Si time m > time r ## si oui m time - r time = r time overload ## si non r time overload = 0
+
+	//réajuste les coup des tier pour que ça prenne en compte les m time overload des tier
+	/*
+		cout | time
+	180  | 60
+	     | 50
+
+	180 - x = reste * 15
+	*/
+	
+	m_to_r(&t4_r, &t4_m, gain_r, augment_by_day_t3, matrix_by_day, &r_to_m_t4);
+	m_to_r(&t3_r, &t3_m, gain_r, augment_by_day_t2, matrix_by_day, &r_to_m_t3);
+	m_to_r(&t2_r, &t2_m, gain_r, augment_by_day_t1, matrix_by_day, &r_to_m_t2);
+	m_to_r(&t1_r, &t1_m, gain_r, 0, matrix_by_day, &r_to_m_t1);
 
 
 /*-----------------------------------------------------------------calcul des reste---------------------------------------------------------------------*/
@@ -440,7 +387,6 @@ int main(void) {
 	int norm_dura_t4 = timeMiniTier(t4_r, t4_p, t4_m, t4_j, gain_r, pristines_by_day, matrix_by_day, pages_by_day, augment_base_gain, 4);
 
 
-
 /*-------------------------------------------------------------------final time-------------------------------------------------------------------------*/
 
 	
@@ -448,7 +394,6 @@ int main(void) {
 	t2_time = timeMiniTier(t2_r, t2_p, t2_m, t2_j, gain_r, pristines_by_day, matrix_by_day, pages_by_day, augment_base_gain, 2) + t1_time;
 	t3_time = timeMiniTier(t3_r, t3_p, t3_m, t3_j, gain_r, pristines_by_day, matrix_by_day, pages_by_day, augment_base_gain, 3) + t2_time;
 	t4_time = timeMiniTier(t4_r, t4_p, t4_m, t4_j, gain_r, pristines_by_day, matrix_by_day, pages_by_day, augment_base_gain, 4) + t3_time;
-
 
 
 	printf("\n\nTime : \n");
@@ -502,9 +447,9 @@ int timeMiniTier(int t_r, int t_p, int t_m, int t_j, int gain_r, int pristines_b
 	if(norm_dura_t < t_j / pages_by_day) {
 		norm_dura_t = t_j / pages_by_day;
 	}
+
 	return norm_dura_t;
 }
-
 
 int coutMoinReste(int t_r, int *reste) {
 
@@ -519,4 +464,20 @@ int coutMoinReste(int t_r, int *reste) {
 		*reste = 0;
 	}
 	return t_r;
+}
+
+void m_to_r(int *t_r, int *t_m, int gain_r, int augment, int matrix_by_day, int *r_to_m_t) {
+	int r_time_overload_t = 0;
+	if(*t_r / (gain_r + augment) < *t_m / matrix_by_day) {
+		r_time_overload_t = *t_m / matrix_by_day - *t_r / (gain_r + augment);
+	}
+	else {
+		r_time_overload_t = 0;
+	}
+
+	if(t_m != 0) {
+		*r_to_m_t += (*t_m * r_time_overload_t) / (*t_m / matrix_by_day);
+		*t_r += (*t_m * r_time_overload_t) / (*t_m / matrix_by_day) * 15;
+		*t_m -= *r_to_m_t;
+	}
 }

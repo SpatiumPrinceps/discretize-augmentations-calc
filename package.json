@@ -1,6 +1,6 @@
 {
   "name": "discretize-augmentations-calc",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Augmenations Calculator for discretize.eu",
   "main": "index.html",
   "scripts": {

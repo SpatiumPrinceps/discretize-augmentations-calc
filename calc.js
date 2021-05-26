@@ -103,7 +103,7 @@ function m_to_r(t_r, t_m, gain_r, augment, matrix_by_day, r_to_m_t) {
 
     if (t_m.v !== 0) {
         r_to_m_t.v += div((t_m.v * r_time_overload_t), div(t_m.v, matrix_by_day));
-        t_r.v += div((t_m.v * r_time_overload_t), div(t_m.v, matrix_by_day) * 15);
+        t_r.v += (t_m.v * r_time_overload_t) / (t_m.v / matrix_by_day) * 15;
         t_m.v -= r_to_m_t.v;
     }
 }
@@ -253,22 +253,10 @@ const calculate = ({
         cm100 * 1 + cm99 * 1 + cm98 * 1 + recs * 3 + weekly * 0.285714285714285;
 
     // normal duration
-    let norm_dura_t1_r = 0;
-    let norm_dura_t1_p = 0;
-    let norm_dura_t1_m = 0;
-    let norm_dura_t1_j = 0;
-    let norm_dura_t2_r = 0;
-    let norm_dura_t2_p = 0;
-    let norm_dura_t2_m = 0;
-    let norm_dura_t2_j = 0;
-    let norm_dura_t3_r = 0;
-    let norm_dura_t3_p = 0;
-    let norm_dura_t3_m = 0;
-    let norm_dura_t3_j = 0;
-    let norm_dura_t4_r = 0;
-    let norm_dura_t4_p = 0;
-    let norm_dura_t4_m = 0;
-    let norm_dura_t4_j = 0;
+    let norm_dura_t1_r, norm_dura_t1_p, norm_dura_t1_m, norm_dura_t1_j = 0;
+    let norm_dura_t2_r, norm_dura_t2_p, norm_dura_t2_m, norm_dura_t2_j = 0;
+    let norm_dura_t3_r, norm_dura_t3_p, norm_dura_t3_m, norm_dura_t3_j = 0;
+    let norm_dura_t4_r, norm_dura_t4_p, norm_dura_t4_m, norm_dura_t4_j = 0;
 
     // ideal conversions
     let p_to_r_t1 = 0;
@@ -289,14 +277,10 @@ const calculate = ({
     /* calculation declaration */
 
     // gain des augmentation de chaque tier (r)
-    let augment_by_day_t1 =
-        (cm100 * 5 + cm99 * 5 + cm98 * 5 + t4 * 15 + recs * 11);
-    let augment_by_day_t2 =
-        2 * (cm100 * 5 + cm99 * 5 + cm98 * 5 + t4 * 15 + recs * 11);
-    let augment_by_day_t3 =
-        3 * (cm100 * 5 + cm99 * 5 + cm98 * 5 + t4 * 15 + recs * 11);
-    let augment_by_day =
-        augment * (cm100 * 5 + cm99 * 5 + cm98 * 5 + t4 * 15 + recs * 11);
+    let augment_by_day_t1 = (cm100 * 5 + cm99 * 5 + cm98 * 5 + t4 * 15 + recs * 11);
+    let augment_by_day_t2 = 2 * (cm100 * 5 + cm99 * 5 + cm98 * 5 + t4 * 15 + recs * 11);
+    let augment_by_day_t3 = 3 * (cm100 * 5 + cm99 * 5 + cm98 * 5 + t4 * 15 + recs * 11);
+    let augment_by_day = augment * (cm100 * 5 + cm99 * 5 + cm98 * 5 + t4 * 15 + recs * 11);
     let augment_base_gain = cm100 * 5 + cm99 * 5 + cm98 * 5 + t4 * 15 + recs * 11;
 
     // relics par jour
@@ -349,7 +333,7 @@ const calculate = ({
     // augmentation déjà acheter
 
     //augmentation déjà acheter
-    if (augment >= 1) {
+    if (augment === 1) {
         t1_r.v = 0;
         t1_p.v = 0;
         t1_m.v = 0;
@@ -359,31 +343,79 @@ const calculate = ({
         norm_dura_t1_m = 0;
         norm_dura_t1_j = 0;
     }
-    if (augment >= 2) {
+    else if (augment === 2) {
+        t1_r.v = 0;
+        t1_p.v = 0;
+        t1_m.v = 0;
+        t1_j.v = 0;
         t2_r.v = 0;
         t2_p.v = 0;
         t2_m.v = 0;
         t2_j.v = 0;
+        norm_dura_t1_r = 0;
+        norm_dura_t1_p = 0;
+        norm_dura_t1_m = 0;
+        norm_dura_t1_j = 0;
         norm_dura_t2_r = 0;
         norm_dura_t2_p = 0;
         norm_dura_t2_m = 0;
         norm_dura_t2_j = 0;
     }
-    if (augment >= 3) {
+    else if (augment === 3) {
+        t1_r.v = 0;
+        t1_p.v = 0;
+        t1_m.v = 0;
+        t1_j.v = 0;
+        t2_r.v = 0;
+        t2_p.v = 0;
+        t2_m.v = 0;
+        t2_j.v = 0;
         t3_r.v = 0;
         t3_p.v = 0;
         t3_m.v = 0;
         t3_j.v = 0;
+        norm_dura_t1_r = 0;
+        norm_dura_t1_p = 0;
+        norm_dura_t1_m = 0;
+        norm_dura_t1_j = 0;
+        norm_dura_t2_r = 0;
+        norm_dura_t2_p = 0;
+        norm_dura_t2_m = 0;
+        norm_dura_t2_j = 0;
         norm_dura_t3_r = 0;
         norm_dura_t3_p = 0;
         norm_dura_t3_m = 0;
         norm_dura_t3_j = 0;
     }
-    if (augment >= 4) {
+    else if (augment === 4) {
+        t1_r.v = 0;
+        t1_p.v = 0;
+        t1_m.v = 0;
+        t1_j.v = 0;
+        t2_r.v = 0;
+        t2_p.v = 0;
+        t2_m.v = 0;
+        t2_j.v = 0;
+        t3_r.v = 0;
+        t3_p.v = 0;
+        t3_m.v = 0;
+        t3_j.v = 0;
         t4_r.v = 0;
         t4_p.v = 0;
         t4_m.v = 0;
         t4_j.v = 0;
+        norm_dura_t1_r = 0;
+        norm_dura_t1_p = 0;
+        norm_dura_t1_m = 0;
+        norm_dura_t1_j = 0;
+        norm_dura_t2_r = 0;
+        norm_dura_t2_p = 0;
+        norm_dura_t2_m = 0;
+        norm_dura_t2_j = 0;
+        norm_dura_t3_r = 0;
+        norm_dura_t3_p = 0;
+        norm_dura_t3_m = 0;
+        norm_dura_t3_j = 0;
         norm_dura_t4_r = 0;
         norm_dura_t4_p = 0;
         norm_dura_t4_m = 0;
@@ -405,8 +437,7 @@ const calculate = ({
     t3_p.v = coutMoinReste(t3_p.v, reste_p);
     t3_m.v = coutMoinReste(t3_m.v, reste_m);
     t3_j.v = coutMoinReste(t3_j.v, reste_j);
-    /gg
-
+    //gg
 
     t4_r.v = coutMoinReste(t4_r.v, reste_r);
     t4_p.v = coutMoinReste(t4_p.v, reste_p);
@@ -442,8 +473,8 @@ const calculate = ({
 
     // ##
     if (t2_m.v !== 0) {
-        r_to_m_t1.v = div(t1_m.v * r_time_overload_t1, div(t1_m.v, matrix_by_day));
-        t1_r.v += div(t1_m.v * r_time_overload_t1, div(t1_m.v, matrix_by_day)) * 15;
+        r_to_m_t1.v = div(t1_m.v * p_to_r_time_overload_t1, div(t1_m.v, matrix_by_day));
+        t1_r.v += div(t1_m.v * p_to_r_time_overload_t1, div(t1_m.v, matrix_by_day)) * 15;
         t1_m.v -= r_to_m_t1.v;
     }
 

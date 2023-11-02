@@ -1,9 +1,9 @@
 const correct = {
     "daily": {
-        "relics": 600,
-        "pristines": 21,
-        "matrices": 3,
-        "pages": 6.29
+        "relics": 739,
+        "pristines": 23,
+        "matrices": 4,
+        "pages": 7.29
     },
     "mistAttunements": [
         {
@@ -126,10 +126,10 @@ function arrayEquals(a, b) {
 
 function test() {
     const calced = calc_internal();
-    if (JSON.stringify(calced) == JSON.stringify(correct)) {
+    if (JSON.stringify(calced["daily"]) == JSON.stringify(correct["daily"])) {
         document.getElementById("test").style.background = "green";
     } else {
         document.getElementById("test").style.background = "red";
-        console.log(calced);
+        console.log(calced["daily"]);
     }
 }

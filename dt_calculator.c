@@ -28,6 +28,7 @@ int main(void) {
 	int cm100 = 1;
 	int cm99 = 1;
 	int cm98 = 1;
+	int cm97 = 1;
 	int t4 = 1;
 	int recs = 1;
 	int weekly = 1;
@@ -53,10 +54,10 @@ int main(void) {
 
 	//Gain by day
 
-	int relics_by_day = (cm100 * (139+ augment * 5)) + (cm99 * (159 + augment * 5)) + (cm98 * (159 + augment * 5)) + (t4 * (54 + augment * 15)) + (recs * (34 + augment * 11)) + (weekly * 7) + convert_pots * 48;
-	int pristines_by_day = cm100 * 2 + cm99 * 2 + cm98 * 2 + t4 * 12 + recs * 3;
-	int matrix_by_day = cm100 * 1 + cm99 * 1 + cm98 * 1;
-	float pages_by_day = cm100 * 1 + cm99 * 1 + cm98 * 1 + recs * 3 + weekly * 0.285714285714285;
+	int relics_by_day = (cm100 * (139+ augment * 5)) + (cm99 * (139+ augment * 5)) + (cm98 * (159 + augment * 5)) + (cm97 * (159 + augment * 5)) + (t4 * (54 + augment * 15)) + (recs * (34 + augment * 11)) + (weekly * 7) + convert_pots * 48;
+	int pristines_by_day = cm100 * 1 + cm99 * 2 + cm98 * 2 + cm97 * 2 + t4 * 12 + recs * 3;
+	int matrix_by_day = cm100 * 1 + cm99 * 1 + cm98 * 1 + cm97 * 1;
+	float pages_by_day = cm100 * 1 + cm99 * 1 + cm98 * 1 + cm97 * 1 + recs * 3 + weekly * 0.285714285714285;
 
 
 	//normal duration
@@ -83,11 +84,11 @@ int main(void) {
 /* calcul déclaration */
 
 	//gain des augmentation de chaque tier (r)
-	int augment_by_day_t1 = 1 * (cm100 * 5 + cm99 * 5 + cm98 * 5 + t4 * 15 + recs * 11);
-	int augment_by_day_t2 = 2 * (cm100 * 5 + cm99 * 5 + cm98 * 5 + t4 * 15 + recs * 11);
-	int augment_by_day_t3 = 3 * (cm100 * 5 + cm99 * 5 + cm98 * 5 + t4 * 15 + recs * 11);
-	int augment_by_day = augment * (cm100 * 5 + cm99 * 5 + cm98 * 5 + t4 * 15 + recs * 11);
-	int augment_base_gain = cm100 * 5 + cm99 * 5 + cm98 * 5 + t4 * 15 + recs * 11;
+	int augment_by_day_t1 = 1 * (cm100 * 5 + cm99 * 5 + cm98 * 5 + cm97 * 5 + t4 * 15 + recs * 11);
+	int augment_by_day_t2 = 2 * (cm100 * 5 + cm99 * 5 + cm98 * 5 + cm97 * 5 + t4 * 15 + recs * 11);
+	int augment_by_day_t3 = 3 * (cm100 * 5 + cm99 * 5 + cm98 * 5 + cm97 * 5 + t4 * 15 + recs * 11);
+	int augment_by_day = augment * (cm100 * 5 + cm99 * 5 + cm98 * 5 + cm97 * 5 + t4 * 15 + recs * 11);
+	int augment_base_gain = cm100 * 5 + cm99 * 5 + cm98 * 5 + cm97 * 5 + t4 * 15 + recs * 11;
 
 	//relics par jour
 	int gain_r = relics_by_day - augment_by_day;

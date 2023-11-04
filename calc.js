@@ -17,6 +17,7 @@ function calc_internal() {
     let cm100 = document.getElementById("cm100").checked;
     let cm99 = document.getElementById("cm99").checked;
     let cm98 = document.getElementById("cm98").checked;
+    let cm97 = document.getElementById("cm97").checked;
     let t4 = document.getElementById("t4").checked;
     let recs = document.getElementById("recs").checked;
     let weeklyT4 = document.getElementById("weeklyT4").checked;
@@ -33,6 +34,7 @@ function calc_internal() {
             cm100: cm100,
             cm99: cm99,
             cm98: cm98,
+            cm97: cm97,
             t4s: t4,
             weekly: weeklyT4,
             recs: recs,
@@ -198,6 +200,7 @@ const calculate = ({
                        cm100: raw100,
                        cm99: raw99,
                        cm98: raw98,
+                       cm97: raw97,
                        t4s: rawT4,
                        recs: rawRecs,
                        weekly: rawWeekly,
@@ -213,6 +216,7 @@ const calculate = ({
     let cm100 = raw100;
     let cm99 = raw99;
     let cm98 = raw98;
+    let cm97 = raw97;
     let t4 = rawT4;
     let recs = rawRecs;
     let weekly = rawWeekly;
@@ -241,16 +245,17 @@ const calculate = ({
     // Gain per day
     let relics_by_day =
         cm100 * (139 + augment * 5) +
-        cm99 * (159 + augment * 5) +
+        cm99 * (139 + augment * 5) +
         cm98 * (159 + augment * 5) +
+        cm97 * (159 + augment * 5) +
         t4 * (54 + augment * 15) +
         recs * (34 + augment * 11) +
         weekly * 7 +
         convert_pots * 48;
-    let pristines_by_day = cm100 * 2 + cm99 * 2 + cm98 * 2 + t4 * 12 + recs * 3;
-    let matrix_by_day = cm100 * 1 + cm99 * 1 + cm98 * 1;
+    let pristines_by_day = cm100 * 2 + cm99 * 2 + cm98 * 2 + cm97 * 2+ t4 * 12 + recs * 3;
+    let matrix_by_day = cm100 * 1 + cm99 * 1 + cm98 * 1 + cm97 * 1;
     let pages_by_day =
-        cm100 * 1 + cm99 * 1 + cm98 * 1 + recs * 3 + weekly * 0.285714285714285;
+        cm100 * 1 + cm99 * 1 + cm98 * 1 + cm97 * 1 + recs * 3 + weekly * 0.285714285714285;
 
     // normal duration
     let norm_dura_t1_r, norm_dura_t1_p, norm_dura_t1_m, norm_dura_t1_j = 0;
@@ -277,11 +282,11 @@ const calculate = ({
     /* calculation declaration */
 
     // gain des augmentation de chaque tier (r)
-    let augment_by_day_t1 = (cm100 * 5 + cm99 * 5 + cm98 * 5 + t4 * 15 + recs * 11);
-    let augment_by_day_t2 = 2 * (cm100 * 5 + cm99 * 5 + cm98 * 5 + t4 * 15 + recs * 11);
-    let augment_by_day_t3 = 3 * (cm100 * 5 + cm99 * 5 + cm98 * 5 + t4 * 15 + recs * 11);
-    let augment_by_day = augment * (cm100 * 5 + cm99 * 5 + cm98 * 5 + t4 * 15 + recs * 11);
-    let augment_base_gain = cm100 * 5 + cm99 * 5 + cm98 * 5 + t4 * 15 + recs * 11;
+    let augment_by_day_t1 = (cm100 * 5 + cm99 * 5 + cm98 * 5 + cm97 * 5 + t4 * 15 + recs * 11);
+    let augment_by_day_t2 = 2 * (cm100 * 5 + cm99 * 5 + cm98 * 5 + cm97 * 5 + t4 * 15 + recs * 11);
+    let augment_by_day_t3 = 3 * (cm100 * 5 + cm99 * 5 + cm98 * 5 + cm97 * 5 + t4 * 15 + recs * 11);
+    let augment_by_day = augment * (cm100 * 5 + cm99 * 5 + cm98 * 5 + cm97 * 5 + t4 * 15 + recs * 11);
+    let augment_base_gain = cm100 * 5 + cm99 * 5 + cm98 * 5 + cm97 * 5 + t4 * 15 + recs * 11;
 
     // relics par jour
     let gain_r = relics_by_day - augment_by_day;
